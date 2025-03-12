@@ -1,0 +1,42 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserTypeEnum {
+  SUPER_ADMIN
+  ADMIN
+  USER
+}
+
+model Users {
+  id       Int          @id @default(autoincrement())
+  name     String       @default("")
+  email    String       @unique @default("")
+  password String       @default("")
+  userType UserTypeEnum @default(USER)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum PendingNotificationsStatusEnums {
+  PENDING
+  SENT
+}
+
+model PendingNotifications {
+  id        Int                             @id @default(autoincrement())
+  sendTo    String
+  subject   String
+  template  String
+  variables Json
+  status    PendingNotificationsStatusEnums @default(PENDING)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
